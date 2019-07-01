@@ -358,7 +358,9 @@ class Video extends Component {
       playWhenInactive,
       hideFullScreenControl,
       controlDuration,
-      disableControls
+      disableControls,
+      onFullScreen,
+      isAdvertisement,
     } = this.props;
 
     const inline = {
@@ -408,6 +410,8 @@ class Video extends Component {
         />
         <Controls
           ref={(ref) => { this.controls = ref; }}
+          onFullScreen={onFullScreen}
+          isAdvertisement={isAdvertisement}
           disableControls={disableControls}
           toggleMute={() => this.toggleMute()}
           toggleFS={() => this.toggleFS()}
@@ -462,6 +466,7 @@ Video.propTypes = {
   autoPlay: PropTypes.bool,
   inlineOnly: PropTypes.bool,
   fullScreenOnly: PropTypes.bool,
+  isAdvertisement: PropTypes.bool,
   disableControls: PropTypes.bool,
   playInBackground: PropTypes.bool,
   playWhenInactive: PropTypes.bool,
@@ -494,6 +499,7 @@ Video.defaultProps = {
   autoPlay: false,
   inlineOnly: false,
   fullScreenOnly: false,
+  isAdvertisement :false,
   disableControls: false,
   playInBackground: false,
   playWhenInactive: false,

@@ -77,7 +77,8 @@ class Controls extends Component {
     }, 1000)
   }
 
-  showControls() {
+  showControls(isClicked = false) {
+    if (this.props.isAdvertisement && isClicked)  this.props.onFullScreen(true)
     this.setState({ hideControls: false }, () => {
       this.progressbar.setValue(2)
       Animated.parallel([
@@ -87,7 +88,8 @@ class Controls extends Component {
     })
   }
 
-  hideControls() {
+  hideControls(isClicked = false) {
+    if (this.props.isAdvertisement && isClicked)  this.props.onFullScreen(true)
     Animated.parallel([
       Animated.timing(this.animControls, { toValue: 0, duration: 200 }),
       Animated.timing(this.scale, { toValue: 0.25, duration: 200 })
@@ -97,7 +99,7 @@ class Controls extends Component {
   hiddenControls() {
     Animated.timing(this.progressbar, { toValue: 0, duration: 200 }).start()
     return (
-      <Touchable style={styles.container} onPress={() => this.showControls()}>
+      <Touchable style={styles.container} onPress={() => this.showControls(true)}>
         <Animated.View style={[styles.container, { paddingBottom: this.progressbar }]}>
           <ProgressBar theme={this.props.theme.progress} progress={this.props.progress} />
         </Animated.View>
@@ -135,7 +137,7 @@ class Controls extends Component {
     const { center, ...controlBar } = theme
 
     return (
-      <Touchable onPress={() => this.hideControls()}>
+      <Touchable onPress={() => this.hideControls(true)}>
         <Animated.View style={[styles.container, { opacity: this.animControls }]}>
           <TopBar
             title={title}
