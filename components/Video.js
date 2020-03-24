@@ -278,12 +278,9 @@ class Video extends Component {
     ]).start();
   }
 
-  toggleMute(mute) {
-    if(mute) {
-      this.setState({ muted: true })
-    } else {
-      this.setState({ muted: !this.state.muted });
-    }
+  toggleMute(isMute) {
+    const muted = isMute || !this.state.muted
+    this.setState({ muted: muted });
   }
 
   seek(percent) {
@@ -417,7 +414,7 @@ class Video extends Component {
           onFullScreen={onFullScreen}
           isAdvertisement={isAdvertisement}
           disableControls={disableControls}
-          toggleMute={() => this.toggleMute()}
+          toggleMute={(isMute) => this.toggleMute(isMute)}
           toggleFS={() => this.toggleFS()}
           togglePlay={() => this.togglePlay()}
           paused={paused}
