@@ -129,7 +129,6 @@ class Video extends Component {
   }
 
   onRotated({ window: { width, height } }) {
-    // Add this condition incase if inline and fullscreen options are turned on
     if (this.props.inlineOnly) return;
     const orientation = width > height ? 'LANDSCAPE' : 'PORTRAIT';
     if (this.props.rotateToFullScreen) {
@@ -278,12 +277,9 @@ class Video extends Component {
     ]).start();
   }
 
-  toggleMute(mute) {
-    if(mute) {
-      this.setState({ muted: true })
-    } else {
-      this.setState({ muted: !this.state.muted });
-    }
+  toggleMute(isMute) {
+    const muted = isMute || !this.state.muted
+    this.setState({ muted: muted });
   }
 
   seek(percent) {
@@ -417,7 +413,7 @@ class Video extends Component {
           onFullScreen={onFullScreen}
           isAdvertisement={isAdvertisement}
           disableControls={disableControls}
-          toggleMute={() => this.toggleMute()}
+          toggleMute={(isMute) => this.toggleMute(isMute)}
           toggleFS={() => this.toggleFS()}
           togglePlay={() => this.togglePlay()}
           paused={paused}
