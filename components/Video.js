@@ -278,8 +278,12 @@ class Video extends Component {
     ]).start();
   }
 
-  toggleMute() {
-    this.setState({ muted: !this.state.muted });
+  toggleMute(mute) {
+    if(mute) {
+      this.setState({ muted: true })
+    } else {
+      this.setState({ muted: !this.state.muted });
+    }
   }
 
   seek(percent) {
