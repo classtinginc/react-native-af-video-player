@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import VideoPlayer from 'react-native-video';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation-locker';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Controls } from './';
 import { checkSource } from './utils';
@@ -212,51 +212,50 @@ class Video extends Component {
     } else {
       this.setState({ paused: !this.state.paused }, () => {
         this.props.onPlay(!this.state.paused);
-        // Orientation.getOrientation((e, orientation) => {
-        //   if (this.props.inlineOnly) return;
-        //   if (!this.state.paused) {
-        //     if (this.props.fullScreenOnly && !this.state.fullScreen) {
-        //       this.setState({ fullScreen: true }, () => {
-        //         this.props.onFullScreen(this.state.fullScreen);
-        //         const initialOrient = Orientation.getInitialOrientation();
-        //         const height = orientation !== initialOrient ?
-        //           Win.width : Win.height;
-        //         this.animToFullscreen(height);
-        //         if (this.props.rotateToFullScreen) Orientation.lockToLandscape();
-        //       });
-        //     }
-        //   } else {
-        //   }
-        // });
+        Orientation.getOrientation((e, orientation) => {
+          if (this.props.inlineOnly) return;
+          if (!this.state.paused) {
+            if (this.props.fullScreenOnly && !this.state.fullScreen) {
+              this.setState({ fullScreen: true }, () => {
+                this.props.onFullScreen(this.state.fullScreen);
+                const initialOrient = Orientation.getInitialOrientation();
+                const height = orientation !== initialOrient ?
+                  Win.width : Win.height;
+                this.animToFullscreen(height);
+                if (this.props.rotateToFullScreen) Orientation.lockToLandscape();
+              });
+            }
+          } else {
+          }
+        });
       });
     }
   }
 
   toggleFS() {
     this.props.onFullScreen(true);
-
-    // this.setState({ fullScreen: !this.state.fullScreen }, () => {
-    //   Orientation.getOrientation((e, orientation) => {
-    //     if (this.state.fullScreen) {
-    //       const initialOrient = Orientation.getInitialOrientation()
-    //       const height = orientation !== initialOrient ?
-    //         Win.width : Win.height
-    //         this.props.onFullScreen(this.state.fullScreen)
-    //         if (this.props.rotateToFullScreen) Orientation.lockToLandscape()
-    //         this.animToFullscreen(height)
-    //     } else {
-    //       if (this.props.fullScreenOnly) {
-    //         this.setState({ paused: true }, () => this.props.onPlay(!this.state.paused))
-    //       }
-    //       this.props.onFullScreen(this.state.fullScreen)
-    //       if (this.props.rotateToFullScreen) Orientation.lockToPortrait()
-    //       this.animToInline()
-    //       setTimeout(() => {
-    //         if (!this.props.lockPortraitOnFsExit) Orientation.unlockAllOrientations()
-    //       }, 1500)
-    //     }
-    //   })
-    // })
+    this.setState({ fullScreen: !this.state.fullScreen }, () => {
+      Orientation.getOrientation((e, orientation) => {
+        if (this.state.fullScreen) {
+          const initialOrient = Orientation.getInitialOrientation()
+          const height = orientation !== initialOrient ?
+            Win.width : Win.height
+            this.props.onFullScreen(this.state.fullScreen)
+            if (this.props.rotateToFullScreen) Orientation.lockToLandscape()
+            this.animToFullscreen(height)
+        } else {
+          if (this.props.fullScreenOnly) {
+            this.setState({ paused: true }, () => this.props.onPlay(!this.state.paused))
+          }
+          this.props.onFullScreen(this.state.fullScreen)
+          if (this.props.rotateToFullScreen) Orientation.lockToPortrait()
+          this.animToInline()
+          setTimeout(() => {
+            if (!this.props.lockPortraitOnFsExit) Orientation.unlockAllOrientations()
+          }, 1500)
+        }
+      })
+    })
   }
 
   animToFullscreen(height) {
