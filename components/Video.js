@@ -87,23 +87,32 @@ class Video extends Component {
     this.setState({ paused: true, loading: true });
   }
 
-  onLoad(data) {
-    if (!this.state.loading) return;
+  setInlineHeight(data) {
+    const { lockRatio, resizedVideoHeight } = this.props;
+    if(resizedVideoHeight) {
+      return resizedVideoHeight;
+    }
+    if(lockRatio) {
+      return (Win.width / this.props.lockRatio);
+    }
     const { height, width } = data.naturalSize;
     const ratio = height === 'undefined' && width === 'undefined' ?
     (9 / 16) : (height / width);
-    const inlineHeight = this.props.lockRatio ?
-      (Win.width / this.props.lockRatio)
-      : (Win.width * ratio);
+    return Win.width * ratio;
+  }
+
+  onLoad(data) {
+    if (!this.state.loading) return;
+    const { height, width } = data.naturalSize;
+    const inlineHeight = this.setInlineHeight(data);
     this.setState({
-      paused: !this.props.autoPlay,
       loading: false,
       inlineHeight,
       duration: data.duration,
     }, () => {
       this.props.onLoad(data);
-      // Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200, useNativeDriver: false }).start();
-      this.props.onPlay(this.state.paused);
+      Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200, useNativeDriver: false }).start();
+    //  this.props.onPlay(this.state.paused);
      // if (!this.state.paused) {
         // if (this.props.fullScreenOnly) {
         //   this.setState({ fullScreen: true }, () => {
