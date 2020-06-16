@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native'
-import Slider from '@react-native-community/slider';
+import { Slider } from "@miblanchard/react-native-slider";
 
 const styles = StyleSheet.create({
   container: {
@@ -33,6 +33,8 @@ const Scrubber = (props) => {
           onValueChange={val => onSeek(val)}
           onSlidingComplete={val => onSeekRelease(val)}
           value={progress}
+          thumbStyle={styles.thumbStyle}
+          trackStyle={styles.trackStyle}
           thumbTintColor={theme.scrubberThumb}
           minimumTrackTintColor={theme.scrubberBar}
           maximumTrackTintColor={trackColor}

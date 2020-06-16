@@ -470,6 +470,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
+"@miblanchard/react-native-slider@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-1.2.2.tgz#8a5164c646e180990123afad0a2143dd803d4a66"
+  integrity sha512-PmR4gYOAhtgHEwlzszhjdjOZtRRELxRmg6zpCN2eZTwW7lll05TPve2QxA5YfuDwXL69OH+3HtZVr0yUIlxmEQ==
+
 "@react-native-community/slider@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-3.0.0.tgz#ffbf78689fc0572fb5c1e2ccb61b2ef074d3dcd2"
@@ -1843,11 +1848,6 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-eme-encryption-scheme-polyfill@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/eme-encryption-scheme-polyfill/-/eme-encryption-scheme-polyfill-2.0.1.tgz#b080b01bffd74c75c9cf8044c1cabedf3b83954f"
-  integrity sha512-Wz+Ro1c0/2Wsx2RLFvTOO0m4LvYn+7cSnq3XOvRvLLBq8jbvUACH/zpU9s0/5+mQa5oaelkU69x+q0z/iWYrFA==
-
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
@@ -3153,11 +3153,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-keymirror@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/keymirror/-/keymirror-0.1.1.tgz#918889ea13f8d0a42e7c557250eee713adc95c35"
-  integrity sha1-kYiJ6hP40KQufFVyUO7nE63JXDU=
-
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -3745,7 +3740,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.6, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.6.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -3811,12 +3806,6 @@ react-native-orientation-locker@^1.1.8:
   resolved "https://registry.yarnpkg.com/react-native-orientation-locker/-/react-native-orientation-locker-1.1.8.tgz#45d1c9e002496b8d286ec8932d6e3e7d341f9c85"
   integrity sha512-+Vd7x6O/3zGqYIMXpeDlaw3ma074Dtnocm8ryT9v5SvaiEcWSzII4frPgXaUcc/MiCq4OWZ1JtVoyw75mdomQw==
 
-"react-native-slider@https://github.com/abbasfreestyle/react-native-slider.git":
-  version "0.11.0"
-  resolved "https://github.com/abbasfreestyle/react-native-slider.git#c53b4965c5e4c3ec258479417898dece367e603e"
-  dependencies:
-    prop-types "^15.5.6"
-
 react-native-vector-icons@6.6.0:
   version "6.6.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-6.6.0.tgz#66cf004918eb05d90778d64bd42077c1800d481b"
@@ -3825,15 +3814,6 @@ react-native-vector-icons@6.6.0:
     lodash "^4.0.0"
     prop-types "^15.6.2"
     yargs "^13.2.2"
-
-react-native-video@5.1.0-alpha5:
-  version "5.1.0-alpha5"
-  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-5.1.0-alpha5.tgz#8bf1bad7bc0d8073d9e9ffa04d9c831c7db7c6a4"
-  integrity sha512-Nelu85lfL+qDxa2ElkR09B6SsaxznM0hp44wkJwA/1luaiblLUvSCSb5Ts3xT0xJ59Ecgy44eNQX6/a4lG9xvA==
-  dependencies:
-    keymirror "^0.1.1"
-    prop-types "^15.7.2"
-    shaka-player "^2.5.9"
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -4137,13 +4117,6 @@ set-value@^2.0.0, set-value@^2.0.1:
     is-extendable "^0.1.1"
     is-plain-object "^2.0.3"
     split-string "^3.0.1"
-
-shaka-player@^2.5.9:
-  version "2.5.12"
-  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.5.12.tgz#4e8d9b2ab4147368b2a32f537ffed5e884301729"
-  integrity sha512-mnoMzE5iLnj6HYrovcnd55Lvd8bwV8712Inq3ECMJmBl2nYi7GXDRwYd3fLk6T0EfOsXwSELuHRQ1iyzk4NVNg==
-  dependencies:
-    eme-encryption-scheme-polyfill "^2.0.1"
 
 shebang-command@^1.2.0:
   version "1.2.0"
