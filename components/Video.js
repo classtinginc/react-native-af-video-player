@@ -91,7 +91,7 @@ class Video extends Component {
     if (!this.state.loading) return;
     const { height, width } = data.naturalSize;
     const ratio = height === 'undefined' && width === 'undefined' ?
-      (9 / 16) : (height / width);
+    (9 / 16) : (height / width);
     const inlineHeight = this.props.lockRatio ?
       (Win.width / this.props.lockRatio)
       : (Win.width * ratio);
@@ -158,7 +158,7 @@ class Video extends Component {
     //   this.animToInline();
     // }
    // if (this.state.fullScreen) this.animToFullscreen(height);
-  }
+      }
 
   onSeekRelease(percent) {
     const seconds = percent * this.state.duration;
@@ -213,7 +213,6 @@ class Video extends Component {
 
   togglePlay() {
     this.setState((prevState) => ({ paused: !prevState.paused }), () => {
-      console.log('2. AFVIDEO:togglePlay:paused', this.state.paused);
       this.props.onPlay(this.state.paused);
     });
   }
@@ -264,9 +263,15 @@ class Video extends Component {
   toggleMute(mute) {
     if(mute) {
       this.setState({ muted: true })
+      this.props.onToggleMute(mute);
     } else {
       this.setState({ muted: !this.state.muted });
+      this.props.onToggleMute(!this.state.muted);
     }
+  }
+
+  setMute(mute) {
+    this.setState({ muted: mute})
   }
 
   seek(percent) {
@@ -326,8 +331,6 @@ class Video extends Component {
       inlineHeight,
       currentTime,
     } = this.state;
-
-    // console.log('1. renderPlayer::paused', paused);
     const {
       url,
       loop,
@@ -466,6 +469,7 @@ Video.propTypes = {
   onError: PropTypes.func,
   onProgress: PropTypes.func,
   onMorePress: PropTypes.func,
+  onToggleMute: PropTypes.func,
   onFullScreen: PropTypes.func,
   onTimedMetadata: PropTypes.func,
   rate: PropTypes.number,
@@ -500,6 +504,7 @@ Video.defaultProps = {
   onError: () => {},
   onProgress: () => {},
   onMorePress: undefined,
+  onToggleMute: () => {},
   onFullScreen: () => {},
   onTimedMetadata: () => {},
   rate: 1,
