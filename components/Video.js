@@ -143,30 +143,25 @@ class Video extends Component {
   onRotated({ window: { width, height } }) {
     // Add this condition incase if inline and fullscreen options are turned on
     if (this.props.inlineOnly) return;
-    // const orientation = width > height ? 'LANDSCAPE' : 'PORTRAIT';
-    // if (this.props.rotateToFullScreen) {
-    //   if (orientation === 'LANDSCAPE') {
-    //     this.setState({ fullScreen: true }, () => {
-    //       this.animToFullscreen(height);
-    //       this.props.onFullScreen(this.state.fullScreen);
-    //     });
-    //     return;
-    //   }
-    //   if (orientation === 'PORTRAIT') {
-    //     this.setState({
-    //       fullScreen: false,
-    //       paused: this.props.fullScreenOnly || this.state.paused,
-    //     }, () => {
-    //       this.animToInline();
-    //       if (this.props.fullScreenOnly) this.props.onPlay(this.state.paused);
-    //       this.props.onFullScreen(this.state.fullScreen);
-    //     });
-    //     return;
-    //   }
-    // } else {
-    //   this.animToInline();
-    // }
-   // if (this.state.fullScreen) this.animToFullscreen(height);
+    const orientation = width > height ? 'LANDSCAPE' : 'PORTRAIT';
+      if (orientation === 'LANDSCAPE') {
+        this.setState({ fullScreen: true }, () => {
+          this.animToFullscreen(height);
+          this.props.onFullScreen(this.state.fullScreen);
+        });
+        return;
+      }
+      if (orientation === 'PORTRAIT') {
+        this.setState({
+          fullScreen: false,
+        }, () => {
+          this.animToInline();
+          if (this.props.fullScreenOnly) this.props.onPlay(this.state.paused);
+          this.props.onFullScreen(this.state.fullScreen);
+        });
+        return;
+      }
+   if (this.state.fullScreen) this.animToFullscreen(height);
       }
 
   onSeekRelease(percent) {
