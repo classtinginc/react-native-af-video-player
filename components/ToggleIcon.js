@@ -28,11 +28,18 @@ const ToggleIcon = (props) => {
     paddingLeft: paddingLeft ? 10 : 0,
     paddingRight: paddingRight ? 5 : 0
   }
+  const hitSlop = {
+    top: 5,
+    bottom: 5,
+    left: 5,
+    right: 5
+  }
 
   return (
     <View style={styles.btnContainer}>
       <TouchableOpacity
         onPress={() => props.onPress()}
+        hitSlop={hitSlop}
       >
         <Icons
           style={padding}
