@@ -1,2 +1,2 @@
-import Video from './internal'
+import Video from './Video'
 export default Video

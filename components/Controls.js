@@ -6,13 +6,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback as Touchable
 } from 'react-native'
-import {
-  PlayButton,
-  ControlBar,
-  Loading,
-  TopBar,
-  ProgressBar
-} from './internal'
+import { PlayButton } from './PlayButton';
+import { ControlBar } from './ControlBar';
+import { Loading } from './Loading';
+import { TopBar } from './TopBar';
+import { ProgressBar } from './ProgressBar';
 
 const styles = StyleSheet.create({
   container: {
@@ -154,7 +152,7 @@ class Controls extends Component {
               theme={center}
             />
           </Animated.View>
-          {!disableControls ? 
+          {!disableControls ?
             <ControlBar
             toggleFS={() => this.props.toggleFS()}
             toggleMute={() => this.props.toggleMute()}
