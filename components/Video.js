@@ -162,7 +162,7 @@ class Video extends Component {
         return;
       }
    if (this.state.fullScreen) this.animToFullscreen(height);
-      }
+  }
 
   onSeekRelease(percent) {
     const seconds = percent * this.state.duration;
@@ -286,10 +286,12 @@ class Video extends Component {
   seekTo(seconds) {
     const percent = seconds / this.state.duration;
     if (seconds > this.state.duration) {
-      throw new Error(`Current time (${seconds}) exceeded the duration ${this.state.duration}`);
-      return false;
+      console.info(`Current time (${seconds}) exceeded the duration ${this.state.duration}`);
+    } else {
+      this.setState({ currentTime: seconds });
+      return this.onSeekRelease(percent);
     }
-    return this.onSeekRelease(percent);
+
   }
 
   progress(time) {
