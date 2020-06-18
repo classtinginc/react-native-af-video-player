@@ -70,7 +70,7 @@ ControlBar.propTypes = {
   muted: PropTypes.bool.isRequired,
   inlineOnly: PropTypes.bool.isRequired,
   hideFullScreenControl: PropTypes.bool.isRequired,
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number]).isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   theme: PropTypes.object.isRequired

@@ -28,7 +28,6 @@ class Controls extends Component {
     this.state = {
       hideControls: false,
       seconds: 0,
-      seeking: false
     }
     this.animControls = new Animated.Value(1)
     this.scale = new Animated.Value(1)
@@ -45,20 +44,16 @@ class Controls extends Component {
 
   onSeek(pos) {
     this.props.onSeek(pos)
-    if (!this.state.seeking) {
-      this.setState({ seeking: true })
-    }
   }
 
   onSeekRelease(pos) {
     this.props.onSeekRelease(pos)
-    this.setState({ seeking: false, seconds: 0 })
   }
 
   setTimer() {
     this.timer = setInterval(() => {
       switch (true) {
-        case this.state.seeking:
+        case this.props.seeking:
           // do nothing
           break
         case this.props.paused:
@@ -133,6 +128,7 @@ class Controls extends Component {
     } = this.props
 
     const { center, ...controlBar } = theme
+    // console.log('whyDidyourender:displayedControls', {progress,currentTime, state: this.state});
 
     return (
       <Touchable onPress={() => this.hideControls(true)}>
@@ -198,7 +194,7 @@ Controls.propTypes = {
   muted: PropTypes.bool.isRequired,
   more: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number]).isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,

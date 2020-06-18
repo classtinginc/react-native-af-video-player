@@ -47,7 +47,7 @@ class ProgressBar extends Component {
 }
 
 ProgressBar.propTypes = {
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number]).isRequired,
   theme: PropTypes.string.isRequired
 }
 

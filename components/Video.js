@@ -12,7 +12,7 @@ import VideoPlayer from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Controls } from './Controls';
-import { checkSource } from './utils';
+import { checkSource, divide, multiply } from './utils';
 
 const Win = Dimensions.get('window');
 const backgroundColor = '#000';
@@ -55,9 +55,8 @@ class Video extends Component {
     super(props);
     this.state = {
       paused: !props.autoPlay,
-      muted: this.props.mute,
-      fullScreen: false,
-      inlineHeight: Win.width * 0.5625,
+      muted: props.mute,
+      inlineHeight: props.resizedVideoHeight || Win.width * 0.5625,
       loading: false,
       duration: 0,
       progress: 0,
@@ -65,10 +64,9 @@ class Video extends Component {
       seeking: false,
       renderError: false,
     };
-    this.animInline = new Animated.Value(Win.width * 0.5625);
-    this.animFullscreen = new Animated.Value(props.resizedVideoHeight || Win.width);
+    this.animInline = new Animated.Value(props.resizedVideoHeight || Win.width * 0.5625);
+    this.animFullscreen = new Animated.Value(Win.height);
     this.onRotated = this.onRotated.bind(this);
-
     this.setVideoRef = (element) => {
       this.video = element;
     };
@@ -103,7 +101,6 @@ class Video extends Component {
 
   onLoad(data) {
     if (!this.state.loading) return;
-    const { height, width } = data.naturalSize;
     const inlineHeight = this.setInlineHeight(data);
     this.setState({
       loading: false,
@@ -111,17 +108,11 @@ class Video extends Component {
       duration: data.duration,
     }, () => {
       this.props.onLoad(data);
-      Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200, useNativeDriver: false }).start();
-    //  this.props.onPlay(this.state.paused);
-     // if (!this.state.paused) {
-        // if (this.props.fullScreenOnly) {
-        //   this.setState({ fullScreen: true }, () => {
-        //     this.props.onFullScreen(this.state.fullScreen);
-        //     // this.animToFullscreen(Win.height);
-        //     if (this.props.rotateToFullScreen) Orientation.lockToLandscape();
-        //   });
-        // }
-     // }
+      if(this.props.fullScreen) {
+        Animated.timing(this.animFullscreen, { toValue: Win.height, duration: 200, useNativeDriver: false }).start();
+      } else {
+        Animated.timing(this.animInline, { toValue: inlineHeight, duration: 200, useNativeDriver: false }).start();
+      }
     });
   }
 
@@ -129,6 +120,10 @@ class Video extends Component {
   //   // console.log('buffering')
   //   this.setState({ loading: true, paused: true })
   // }
+
+  onSeek(e) {
+    // console.log('onSeek', e);
+  }
 
   onEnd() {
     this.props.onEnd();
@@ -145,30 +140,25 @@ class Video extends Component {
     if (this.props.inlineOnly) return;
     const orientation = width > height ? 'LANDSCAPE' : 'PORTRAIT';
       if (orientation === 'LANDSCAPE') {
-        this.setState({ fullScreen: true }, () => {
-          this.animToFullscreen(height);
-          this.props.onFullScreen(this.state.fullScreen);
-        });
+        this.animToFullscreen(height);
+        this.props.onFullScreen(this.props.fullScreen);
         return;
-      }
+      };
       if (orientation === 'PORTRAIT') {
-        this.setState({
-          fullScreen: false,
-        }, () => {
-          this.animToInline();
-          if (this.props.fullScreenOnly) this.props.onPlay(this.state.paused);
-          this.props.onFullScreen(this.state.fullScreen);
-        });
+        this.animToInline();
+        this.props.onFullScreen(this.props.fullScreen);
         return;
-      }
-   if (this.state.fullScreen) this.animToFullscreen(height);
+      };
   }
 
   onSeekRelease(percent) {
-    const seconds = percent * this.state.duration;
-    this.setState({ progress: percent, seeking: false }, () => {
-      this.video.seek(seconds);
-    });
+    // console.log('onSeekRelease', percent);
+    const seconds = multiply(percent, this.state.duration);
+    // console.log('onSeekRelease:seconds', seconds);
+    this.video.seek(seconds);
+    setTimeout(()=> {
+      this.setState({ seeking: false });
+    }, 500);
   }
 
   onError(msg) {
@@ -192,61 +182,37 @@ class Video extends Component {
   }
 
   BackHandler() {
-    if (this.state.fullScreen) {
-      this.setState({ fullScreen: false }, () => {
+    if (this.props.fullScreen) {
         this.animToInline();
-        this.props.onFullScreen(this.state.fullScreen);
+        this.props.onFullScreen(this.props.fullScreen);
         if (this.props.fullScreenOnly && !this.state.paused) this.togglePlay();
         if (this.props.rotateToFullScreen) Orientation.lockToPortrait();
         setTimeout(() => {
           if (!this.props.lockPortraitOnFsExit) Orientation.unlockAllOrientations();
         }, 1500);
-      });
       return true;
     }
     return false;
   }
 
   pause() {
-    if (!this.state.paused) this.togglePlay();
+    if (!this.state.paused) this.togglePlay(false);
   }
 
   play() {
-    if (this.state.paused) this.togglePlay();
+    if (this.state.paused) this.togglePlay(false);
   }
 
-  togglePlay() {
+  togglePlay(shouldCallOnPlayProps = true) {
     this.setState((prevState) => ({ paused: !prevState.paused }), () => {
-      this.props.onPlay(this.state.paused);
+      if(shouldCallOnPlayProps) {
+        this.props.onPlay(this.state.paused);
+      }
     });
   }
 
   toggleFS() {
-    // this.setState({ fullScreen: !this.state.fullScreen }, () => {
-      this.props.onFullScreen(true);
-    // });
-    // this.setState({ fullScreen: !this.state.fullScreen }, () => {
-    //   Orientation.getOrientation((e, orientation) => {
-    //     if (this.state.fullScreen) {
-    //       const initialOrient = Orientation.getInitialOrientation()
-    //       const height = orientation !== initialOrient ?
-    //         Win.width : Win.height
-    //         this.props.onFullScreen(this.state.fullScreen)
-    //         if (this.props.rotateToFullScreen) Orientation.lockToLandscape()
-    //         this.animToFullscreen(height)
-    //     } else {
-    //       if (this.props.fullScreenOnly) {
-    //         this.setState({ paused: true }, () => this.props.onPlay(this.state.paused))
-    //       }
-    //       this.props.onFullScreen(this.state.fullScreen)
-    //       if (this.props.rotateToFullScreen) Orientation.lockToPortrait()
-    //       this.animToInline()
-    //       setTimeout(() => {
-    //         if (!this.props.lockPortraitOnFsExit) Orientation.unlockAllOrientations()
-    //       }, 1500)
-    //     }
-    //   })
-    // })
+    this.props.onFullScreen(true);
   }
 
   animToFullscreen(height) {
@@ -275,28 +241,30 @@ class Video extends Component {
   }
 
   setMute(mute) {
-    this.setState({ muted: mute})
+    this.setState({ muted: mute })
   }
 
   seek(percent) {
-    const currentTime = percent * this.state.duration;
-    this.setState({ seeking: true, currentTime });
+    // console.log('seekPercent', percent);
+    const currentTime = multiply(percent, this.state.duration);
+    // console.log('seekCurrentTime', currentTime);
+    this.setState({ seeking: true, currentTime, progress: percent });
   }
 
   seekTo(seconds) {
-    const percent = seconds / this.state.duration;
+    const percent = divide(seconds , this.state.duration);
     if (seconds > this.state.duration) {
-      console.info(`Current time (${seconds}) exceeded the duration ${this.state.duration}`);
+    //  console.info(`Current time (${seconds}) exceeded the duration ${this.state.duration}`);
     } else {
       this.setState({ currentTime: seconds });
       return this.onSeekRelease(percent);
     }
-
   }
 
   progress(time) {
     const { currentTime } = time;
-    const progress = currentTime / this.state.duration;
+    const progress = divide(currentTime, this.state.duration);
+    // console.log('progress', time, progress, this.state.seeking);
     if (!this.state.seeking) {
       this.setState({ progress, currentTime }, () => {
         this.props.onProgress(time);
@@ -305,7 +273,7 @@ class Video extends Component {
   }
 
   renderError() {
-    const { fullScreen } = this.state;
+    const { fullScreen } = this.props;
     const inline = {
       height: this.animInline,
       alignSelf: 'stretch',
@@ -328,11 +296,11 @@ class Video extends Component {
 
   renderPlayer() {
     const {
-      fullScreen,
       paused,
       muted,
       loading,
       progress,
+      seeking,
       duration,
       inlineHeight,
       currentTime,
@@ -356,6 +324,7 @@ class Video extends Component {
       hideFullScreenControl,
       controlDuration,
       disableControls,
+      fullScreen,
       onFullScreen,
       isAdvertisement,
     } = this.props;
@@ -401,6 +370,7 @@ class Video extends Component {
           onLoad={e => this.onLoad(e)} // Callback when video loads
           onProgress={e => this.progress(e)} // Callback every ~250ms with currentTime
           onEnd={() => this.onEnd()}
+          onSeek={e => this.onSeek(e)}
           // onError={e => this.onError(e)}
           // onBuffer={() => this.onBuffer()} // Callback when remote video is buffering
           onTimedMetadata={e => onTimedMetadata(e)} // Callback when the stream receive some metadata
@@ -414,6 +384,7 @@ class Video extends Component {
           toggleFS={() => this.toggleFS()}
           togglePlay={() => this.togglePlay()}
           paused={paused}
+          seeking={seeking}
           muted={muted}
           fullscreen={fullScreen}
           loading={loading}
@@ -458,6 +429,7 @@ Video.propTypes = {
     PropTypes.bool,
     PropTypes.object,
   ]),
+  video: PropTypes.object,
   loop: PropTypes.bool,
   mute: PropTypes.bool,
   autoPlay: PropTypes.bool,
