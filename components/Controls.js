@@ -9,7 +9,6 @@ import {
 import { PlayButton } from './PlayButton';
 import { ControlBar } from './ControlBar';
 import { Loading } from './Loading';
-import { TopBar } from './TopBar';
 import { ProgressBar } from './ProgressBar';
 
 const styles = StyleSheet.create({
@@ -114,9 +113,6 @@ class Controls extends Component {
       fullscreen,
       muted,
       loading,
-      logo,
-      more,
-      onMorePress,
       title,
       progress,
       currentTime,
@@ -124,7 +120,9 @@ class Controls extends Component {
       theme,
       inlineOnly,
       hideFullScreenControl,
-      disableControls
+      disableControls,
+      topBar,
+      topBarProps,
     } = this.props
 
     const { center, ...controlBar } = theme
@@ -133,13 +131,7 @@ class Controls extends Component {
     return (
       <Touchable onPress={() => this.hideControls(true)}>
         <Animated.View style={[styles.container, { opacity: this.animControls }]}>
-          <TopBar
-            title={title}
-            logo={logo}
-            more={more}
-            onMorePress={() => onMorePress()}
-            theme={{ title: theme.title, more: theme.more }}
-          />
+          {topBar(topBarProps)}
           <Animated.View style={[styles.flex, { transform: [{ scale: this.scale }] }]}>
             <PlayButton
               onPress={() => this.props.togglePlay()}
@@ -186,20 +178,18 @@ Controls.propTypes = {
   togglePlay: PropTypes.func.isRequired,
   onSeek: PropTypes.func.isRequired,
   onSeekRelease: PropTypes.func.isRequired,
-  onMorePress: PropTypes.func.isRequired,
   paused: PropTypes.bool.isRequired,
   inlineOnly: PropTypes.bool.isRequired,
   hideFullScreenControl: PropTypes.bool.isRequired,
   fullscreen: PropTypes.bool.isRequired,
   muted: PropTypes.bool.isRequired,
-  more: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   progress: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.number), PropTypes.number]).isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  logo: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  topBar: PropTypes.elementType.isRequired,
 }
 
 export { Controls }

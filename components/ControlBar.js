@@ -9,7 +9,7 @@ import { Scrubber } from './Scrubber';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 35,
+    height: 40,
     alignSelf: 'stretch',
     justifyContent: 'flex-end'
   }
@@ -30,7 +30,7 @@ const ControlBar = (props) => {
   } = props
 
   return (
-    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={styles.container}>
+    <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.50)']} style={styles.container}>
       <Time time={currentTime} theme={theme.seconds} />
       <Scrubber
         onSeek={pos => onSeek(pos)}

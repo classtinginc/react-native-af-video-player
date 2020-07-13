@@ -12,6 +12,7 @@ import VideoPlayer from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import { Controls } from './Controls';
+import { TopBar } from './TopBar';
 import { checkSource, divide, multiply } from './utils';
 
 const Win = Dimensions.get('window');
@@ -309,7 +310,6 @@ class Video extends Component {
       url,
       loop,
       title,
-      logo,
       rate,
       style,
       volume,
@@ -317,7 +317,6 @@ class Video extends Component {
       theme,
       onTimedMetadata,
       resizeMode,
-      onMorePress,
       inlineOnly,
       playInBackground,
       playWhenInactive,
@@ -327,6 +326,8 @@ class Video extends Component {
       fullScreen,
       onFullScreen,
       isAdvertisement,
+      topBar,
+      topBarProps,
     } = this.props;
 
     const inline = {
@@ -383,6 +384,8 @@ class Video extends Component {
           toggleMute={() => this.toggleMute()}
           toggleFS={() => this.toggleFS()}
           togglePlay={() => this.togglePlay()}
+          topBar={topBar}
+          topBarProps={topBarProps}
           paused={paused}
           seeking={seeking}
           muted={muted}
@@ -393,10 +396,7 @@ class Video extends Component {
           progress={progress}
           currentTime={currentTime}
           duration={duration}
-          logo={logo}
           title={title}
-          more={!!onMorePress}
-          onMorePress={() => onMorePress()}
           theme={setTheme}
           inlineOnly={inlineOnly}
           hideFullScreenControl={hideFullScreenControl}
@@ -453,9 +453,10 @@ Video.propTypes = {
   rate: PropTypes.number,
   volume: PropTypes.number,
   lockRatio: PropTypes.number,
-  logo: PropTypes.string,
   title: PropTypes.string,
   theme: PropTypes.object,
+  topBar: PropTypes.elementType,
+  topBarProps: PropTypes.any,
   resizeMode: PropTypes.string,
   hideFullScreenControl: PropTypes.bool,
 };
@@ -488,10 +489,11 @@ Video.defaultProps = {
   rate: 1,
   volume: 1,
   lockRatio: undefined,
-  logo: undefined,
   title: '',
   theme: defaultTheme,
   resizeMode: 'contain',
+  topBar: () => <TopBar />,
+  topBarProps: '',
 };
 
 export default Video;
