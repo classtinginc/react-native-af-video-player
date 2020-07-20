@@ -1,56 +1,63 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-
-import {
-  View,
-  StyleSheet,
-  Text,
-} from 'react-native'
-
-import LinearGradient from 'react-native-linear-gradient'
-
-const backgroundColor = 'transparent'
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     height: 40,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-  row: {
-    flexDirection: 'row',
-    alignSelf: 'center',
-    alignItems: 'center'
-  },
-  title: {
+  container: {
     flex: 1,
-    backgroundColor,
-    paddingLeft: 10,
-    paddingRight: 35,
-    fontSize: 16
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-})
+  video: {
+    width: '100%',
+    height: '100%',
+  },
+  icon: {
+    width: 26,
+    height: 26,
+  },
+  leftContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  rightContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  centerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+});
 
-const TopBar = (props) => {
-  const {
-    title,
-  } = props
+const TopBar = ({
+  headerLeft,
+  headerRight,
+}) => {
   return (
-    <LinearGradient colors={['rgba(0,0,0,0.50)', 'rgba(0,0,0,0)']} style={styles.container}>
-      <View style={styles.row}>
-        <Text
-          style={[styles.title]}
-          numberOfLines={1}
-          ellipsizeMode="tail"
-        >
-          {title}
-        </Text>
+    <LinearGradient
+      colors={['rgba(0,0,0,0.50)', 'rgba(0,0,0,0)']}
+      style={styles.wrapper}
+    >
+      <View style={styles.container}>
+        <View style={styles.leftContainer}>
+          {headerLeft ? headerLeft() : undefined}
+        </View>
+        <View style={styles.centerContainer} />
+        <View style={styles.rightContainer}>
+          {headerRight ? headerRight() : undefined}
+        </View>
       </View>
     </LinearGradient>
-  )
-}
+  );
+};
 
-TopBar.propTypes = {
-  title: PropTypes.string.isRequired,
-}
-
-export { TopBar }
+export { TopBar };
