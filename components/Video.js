@@ -328,6 +328,7 @@ class Video extends Component {
       isAdvertisement,
       topBar,
       topBarProps,
+      ignoreSilentSwitch,
     } = this.props;
 
     const inline = {
@@ -370,6 +371,7 @@ class Video extends Component {
           onLoadStart={() => this.onLoadStart()} // Callback when video starts to load
           onLoad={e => this.onLoad(e)} // Callback when video loads
           onProgress={e => this.progress(e)} // Callback every ~250ms with currentTime
+          ignoreSilentSwitch={ignoreSilentSwitch}
           onEnd={() => this.onEnd()}
           onSeek={e => this.onSeek(e)}
           // onError={e => this.onError(e)}
@@ -459,6 +461,7 @@ Video.propTypes = {
   topBarProps: PropTypes.any,
   resizeMode: PropTypes.string,
   hideFullScreenControl: PropTypes.bool,
+  ignoreSilentSwitch: PropTypes.string,
 };
 
 Video.defaultProps = {
@@ -477,6 +480,7 @@ Video.defaultProps = {
   rotateToFullScreen: false,
   lockPortraitOnFsExit: false,
   hideFullScreenControl: false,
+  ignoreSilentSwitch: 'ignore',
   onEnd: () => {},
   onLoad: () => {},
   onPlay: () => {},
